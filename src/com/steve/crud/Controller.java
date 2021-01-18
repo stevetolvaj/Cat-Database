@@ -64,8 +64,8 @@ public class Controller {
 
     @FXML
     public void initialize() {
-        // TODO get table to update.
         showCats();
+        // TODO
     }
 
     public Connection getConnection() {
