@@ -3,17 +3,17 @@ package com.steve.crud;
 
 import java.sql.Date;
 
-public class Cats {
+public class Cat {
     private String name;
     private Date dob;
     private String breed;
     private int weight;
     private String color;
 
-    public Cats() {
+    public Cat() {
     }
 
-    public Cats(String name, Date dob, String breed, int weight, String color) {
+    public Cat(String name, Date dob, String breed, int weight, String color) {
         this.name = name;
         this.dob = dob;
         this.breed = breed;

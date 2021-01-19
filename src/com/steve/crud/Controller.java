@@ -8,6 +8,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.sql.*;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.UUID;
 
 
@@ -29,22 +31,22 @@ public class Controller {
     private TextField textFieldColor;
 
     @FXML
-    private TableView<Cats> tableViewCats;
+    private TableView<Cat> tableViewCats;
 
     @FXML
-    private TableColumn<Cats, String> columnCatsName;
+    private TableColumn<Cat, String> columnCatsName;
 
     @FXML
-    private TableColumn<Cats, Date> columnDOB;
+    private TableColumn<Cat, Date> columnDOB;
 
     @FXML
-    private TableColumn<Cats, String> columnBreed;
+    private TableColumn<Cat, String> columnBreed;
 
     @FXML
-    private TableColumn<Cats, Integer> columnWeight;
+    private TableColumn<Cat, Integer> columnWeight;
 
     @FXML
-    private TableColumn<Cats, String> columnColor;
+    private TableColumn<Cat, String> columnColor;
 
     @FXML
     private Button buttonInsert;
@@ -54,6 +56,7 @@ public class Controller {
 
     @FXML
     private Button buttonDelete;
+
 
     @FXML
     public void handleButtonAction(ActionEvent event) {
@@ -65,7 +68,7 @@ public class Controller {
     @FXML
     public void initialize() {
         showCats();
-        System.out.println(UUID.randomUUID().toString());
+        textFieldDOB.getEditor().setDisable(true);
     }
 
     public Connection getConnection() {
@@ -79,8 +82,8 @@ public class Controller {
         }
     }
 
-    public ObservableList<Cats> getCatsList() {
-        ObservableList<Cats> catsList = FXCollections.observableArrayList();
+    public ObservableList<Cat> getCatsList() {
+        ObservableList<Cat> catsList = FXCollections.observableArrayList();
         Connection conn = getConnection();
         String query = "SELECT * FROM cats";
         Statement st;
@@ -89,9 +92,9 @@ public class Controller {
         try {
             st = conn.createStatement();
             rs = st.executeQuery(query);
-            Cats cats;
+            Cat cats;
             while (rs.next()) {
-                cats = new Cats(rs.getString("name"), rs.getDate("dob"),
+                cats = new Cat(rs.getString("name"), rs.getDate("dob"),
                         rs.getString("breed"), rs.getInt("weight"),
                         rs.getString("color"));
                 catsList.add(cats);
@@ -99,21 +102,20 @@ public class Controller {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        // Testing connection.
-//        for (int i = 0; i < 5; i++) {
-//            System.out.println(catsList.get(i).getName());
-//        }
+
+        Comparator<Cat> catComparator = Comparator.comparing(Cat::getName, String.CASE_INSENSITIVE_ORDER);
+        catsList.sort(catComparator);
         return catsList;
     }
 
     public void showCats() {
-        ObservableList<Cats> list = getCatsList();
+        ObservableList<Cat> list = getCatsList();
 
-        columnCatsName.setCellValueFactory(new PropertyValueFactory<Cats, String>("name"));
-        columnDOB.setCellValueFactory(new PropertyValueFactory<Cats, Date>("dob"));
-        columnBreed.setCellValueFactory(new PropertyValueFactory<Cats, String>("breed"));
-        columnWeight.setCellValueFactory(new PropertyValueFactory<Cats, Integer>("weight"));
-        columnColor.setCellValueFactory(new PropertyValueFactory<Cats, String>("color"));
+        columnCatsName.setCellValueFactory(new PropertyValueFactory<Cat, String>("name"));
+        columnDOB.setCellValueFactory(new PropertyValueFactory<Cat, Date>("dob"));
+        columnBreed.setCellValueFactory(new PropertyValueFactory<Cat, String>("breed"));
+        columnWeight.setCellValueFactory(new PropertyValueFactory<Cat, Integer>("weight"));
+        columnColor.setCellValueFactory(new PropertyValueFactory<Cat, String>("color"));
 
         tableViewCats.setItems(list);
     }
