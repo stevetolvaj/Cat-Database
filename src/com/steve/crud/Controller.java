@@ -4,13 +4,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.sql.*;
+import java.util.UUID;
 
 
 public class Controller {
@@ -19,7 +17,7 @@ public class Controller {
     private TextField textFieldCatsName;
 
     @FXML
-    private TextField textFieldDOB;
+    private DatePicker textFieldDOB;
 
     @FXML
     private TextField textFieldBreed;
@@ -59,13 +57,15 @@ public class Controller {
 
     @FXML
     public void handleButtonAction(ActionEvent event) {
-
+        if (event.getSource() == buttonInsert) {
+            insertRecord();
+        }
     }
 
     @FXML
     public void initialize() {
         showCats();
-        // TODO
+        System.out.println(UUID.randomUUID().toString());
     }
 
     public Connection getConnection() {
@@ -116,6 +116,28 @@ public class Controller {
         columnColor.setCellValueFactory(new PropertyValueFactory<Cats, String>("color"));
 
         tableViewCats.setItems(list);
+    }
+
+    private void insertRecord() {
+        // Use single quotes for mySQL statements.
+        Date getDateFromPicker = java.sql.Date.valueOf(textFieldDOB.getValue());
+        String query = "INSERT INTO cats VALUES ('" + UUID.randomUUID().toString() + "','" + textFieldCatsName.getText() + "','" +
+                getDateFromPicker + "','" + textFieldBreed.getText() + "','" + textFieldWeight.getText() + "','" +
+                textFieldColor.getText() + "')";
+        executeQuery(query);
+        showCats();
+        System.out.println(query);
+    }
+
+    private void executeQuery(String query) {
+        Connection conn = getConnection();
+        Statement st;
+        try {
+            st = conn.createStatement();
+            st.executeUpdate(query);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 }
