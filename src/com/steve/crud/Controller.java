@@ -66,6 +66,9 @@ public class Controller {
         if (event.getSource() == buttonUpdate) {
             updateRecord();
         }
+        if (event.getSource() == buttonDelete) {
+            deleteButton();
+        }
     }
 
     @FXML
@@ -139,7 +142,13 @@ public class Controller {
         Date getDateFromPicker = java.sql.Date.valueOf(textFieldDOB.getValue());
         String query = "UPDATE cats SET dob = '" + getDateFromPicker +
                 "', breed = '" + textFieldBreed.getText() + "', weight = '" + textFieldWeight.getText() +
-                "', color = '" + textFieldColor.getText() + "'";
+                "', color = '" + textFieldColor.getText() + "' WHERE name = '" + textFieldCatsName.getText() +"'";
+        executeQuery(query);
+        showCats();
+    }
+
+    private void deleteButton() {
+        String query = "DELETE FROM cats WHERE name = '" + textFieldCatsName.getText() + "'";
         executeQuery(query);
         showCats();
     }
