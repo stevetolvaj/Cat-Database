@@ -138,7 +138,6 @@ public class Controller {
     }
 
     private void updateRecord() {
-        // TODO fix query to update all fields related to a name but keep the uuid the same for future reference if needed.
         Date getDateFromPicker = java.sql.Date.valueOf(textFieldDOB.getValue());
         String query = "UPDATE cats SET dob = '" + getDateFromPicker +
                 "', breed = '" + textFieldBreed.getText() + "', weight = '" + textFieldWeight.getText() +
