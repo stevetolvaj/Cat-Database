@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 
 import java.sql.*;
 import java.util.Collections;
@@ -77,6 +78,7 @@ public class Controller {
         textFieldDOB.getEditor().setDisable(true);
     }
 
+
     public Connection getConnection() {
         Connection conn;
         try {
@@ -108,9 +110,6 @@ public class Controller {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
-        Comparator<Cat> catComparator = Comparator.comparing(Cat::getName, String.CASE_INSENSITIVE_ORDER);
-        catsList.sort(catComparator);
         return catsList;
     }
 
@@ -124,6 +123,8 @@ public class Controller {
         columnColor.setCellValueFactory(new PropertyValueFactory<Cat, String>("color"));
 
         tableViewCats.setItems(list);
+        // Sort list in ascending by cats name.
+        tableViewCats.getSortOrder().add(columnCatsName);
     }
 
     private void insertRecord() {
@@ -163,4 +164,10 @@ public class Controller {
         }
     }
 
+    @FXML
+    public void handleMouseAction(MouseEvent mouseEvent) {
+        Cat cat = tableViewCats.getSelectionModel().getSelectedItem();
+        System.out.println("name= " + cat.getName());
+        System.out.println("age= " + cat.getDob());
+    }
 }
