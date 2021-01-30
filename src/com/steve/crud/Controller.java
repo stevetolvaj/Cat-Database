@@ -9,8 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
 import java.sql.*;
-import java.util.Collections;
-import java.util.Comparator;
+import java.time.LocalDate;
 import java.util.UUID;
 
 
@@ -57,6 +56,7 @@ public class Controller {
 
     @FXML
     private Button buttonDelete;
+
 
 
     @FXML
@@ -167,7 +167,11 @@ public class Controller {
     @FXML
     public void handleMouseAction(MouseEvent mouseEvent) {
         Cat cat = tableViewCats.getSelectionModel().getSelectedItem();
-        System.out.println("name= " + cat.getName());
-        System.out.println("age= " + cat.getDob());
+        textFieldCatsName.setText(cat.getName());
+        textFieldDOB.setValue(cat.getDob().toLocalDate());
+        textFieldBreed.setText(cat.getBreed());
+        textFieldWeight.setText(String.valueOf(cat.getWeight()));
+        textFieldColor.setText(cat.getColor());
+
     }
 }
