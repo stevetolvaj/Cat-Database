@@ -82,7 +82,8 @@ public class Controller {
     public Connection getConnection() {
         Connection conn;
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/cats", "root", "root");
+            // Not using ssl in non production environment.
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/cats?autoReconnect=true&useSSL=false", "root", "root");
             return conn;
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
@@ -167,11 +168,11 @@ public class Controller {
     @FXML
     public void handleMouseAction(MouseEvent mouseEvent) {
         Cat cat = tableViewCats.getSelectionModel().getSelectedItem();
+
         textFieldCatsName.setText(cat.getName());
         textFieldDOB.setValue(cat.getDob().toLocalDate());
         textFieldBreed.setText(cat.getBreed());
         textFieldWeight.setText(String.valueOf(cat.getWeight()));
         textFieldColor.setText(cat.getColor());
-
     }
 }
