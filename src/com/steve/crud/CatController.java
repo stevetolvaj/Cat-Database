@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 
-public class Controller {
+public class CatController {
 
     @FXML
     private TextField textFieldCatsName;

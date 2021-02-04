@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="center" hgap="10" styleClass="anchor" vgap="10" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.steve.crud.Controller">
+<GridPane alignment="center" hgap="10" styleClass="anchor" vgap="10" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.steve.crud.CatController">
    <stylesheets>
       <URL value="@style.css" />
    </stylesheets>
