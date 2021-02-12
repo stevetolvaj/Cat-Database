@@ -94,7 +94,7 @@ public class CatController {
     public ObservableList<Cat> getCatsList() {
         ObservableList<Cat> catsList = FXCollections.observableArrayList();
         Connection conn = getConnection();
-        String query = "SELECT * FROM catsdetails";
+        String query = "SELECT * FROM cats_details";
         Statement st;
         ResultSet rs;
 
@@ -132,7 +132,7 @@ public class CatController {
         // Use single quotes for mySQL statements.
         Date getDateFromPicker = java.sql.Date.valueOf(textFieldDOB.getValue());
         // TODO will use uuid provided by login database once login features are created.
-        String query = "INSERT INTO catsdetails VALUES ('" + UUID.randomUUID().toString() + "','" + textFieldCatsName.getText() + "','" +
+        String query = "INSERT INTO cats_details VALUES ('" + UUID.randomUUID().toString() + "','" + textFieldCatsName.getText() + "','" +
                 getDateFromPicker + "','" + textFieldBreed.getText() + "','" + textFieldWeight.getText() + "','" +
                 textFieldColor.getText() + "')";
         executeQuery(query);
@@ -142,7 +142,7 @@ public class CatController {
 
     private void updateRecord() {
         Date getDateFromPicker = java.sql.Date.valueOf(textFieldDOB.getValue());
-        String query = "UPDATE catsdetails SET dob = '" + getDateFromPicker +
+        String query = "UPDATE cats_details SET dob = '" + getDateFromPicker +
                 "', breed = '" + textFieldBreed.getText() + "', weight = '" + textFieldWeight.getText() +
                 "', color = '" + textFieldColor.getText() + "' WHERE name = '" + textFieldCatsName.getText() +"'";
         executeQuery(query);
@@ -150,7 +150,7 @@ public class CatController {
     }
 
     private void deleteButton() {
-        String query = "DELETE FROM catsdetails WHERE name = '" + textFieldCatsName.getText() + "'";
+        String query = "DELETE FROM cats_details WHERE name = '" + textFieldCatsName.getText() + "'";
         executeQuery(query);
         showCats();
     }

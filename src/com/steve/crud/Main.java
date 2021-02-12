@@ -11,7 +11,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("cats.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
         primaryStage.setTitle("Cat Dating App");
         primaryStage.setScene(new Scene(root, 800, 500));
         primaryStage.getIcons().add(new Image("file:src/com/steve/crud/cat_icon_138789.png"));

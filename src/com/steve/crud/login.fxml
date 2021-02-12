@@ -51,12 +51,12 @@
                   </PasswordField>
                   <HBox alignment="CENTER" prefHeight="71.0" prefWidth="515.0">
                      <children>
-                        <Button fx:id="btnLogin" mnemonicParsing="false" prefHeight="32.0" prefWidth="80.0" text="Login">
+                        <Button fx:id="btnLogin" mnemonicParsing="false" onMouseClicked="#handleButtonAction" prefHeight="32.0" prefWidth="80.0" text="Login">
                            <HBox.margin>
                               <Insets right="40.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="btnNewUser" mnemonicParsing="false" prefHeight="32.0" prefWidth="80.0" text="New User">
+                        <Button fx:id="btnNewUser" mnemonicParsing="false" onMouseClicked="#handleButtonAction" prefHeight="32.0" prefWidth="80.0" text="New User">
                            <HBox.margin>
                               <Insets left="40.0" />
                            </HBox.margin>
