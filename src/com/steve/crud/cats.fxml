@@ -80,7 +80,7 @@
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icons8_add_list_48px.png" />
+                        <Image url="@../../../Images/icons8_add_list_48px.png" />
                      </image>
                   </ImageView>
                </graphic></Button>
@@ -88,7 +88,7 @@
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icons8_update_left_rotation_48px.png" />
+                        <Image url="@../../../Images/icons8_update_left_rotation_48px.png" />
                      </image>
                   </ImageView>
                </graphic></Button>
@@ -96,7 +96,7 @@
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icons8_delete_48px.png" />
+                        <Image url="@../../../Images/icons8_delete_48px.png" />
                      </image>
                   </ImageView>
                </graphic></Button>
