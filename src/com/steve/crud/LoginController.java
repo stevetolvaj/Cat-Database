@@ -7,15 +7,17 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
-import java.awt.event.ActionEvent;
-import java.security.MessageDigest;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
-import java.util.Random;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+import java.sql.*;
 import java.util.UUID;
+
+
 
 public class LoginController {
 
@@ -33,16 +35,24 @@ public class LoginController {
 
     @FXML
     public void initialize() {
-
     }
 
+    /**
+     * The handleButtonAction method runs the login procedure or create new user procedure.
+     * @param mouseEvent The event chosen by the user.
+     */
     public void handleButtonAction(MouseEvent mouseEvent) {
         if (mouseEvent.getSource() == btnNewUser) {
             newUser(textFieldUsername.getText(), passwordFieldUserPass.getText());
+        } else if (mouseEvent.getSource() == btnLogin) {
+            login();
         }
     }
 
-
+    /**
+     * The getConnection method will retrieve a connection to the mySQL database.
+     * @return Connection to mySQL database.
+     */
     private Connection getConnection() {
         Connection conn;
         try {
@@ -55,21 +65,63 @@ public class LoginController {
         }
     }
 
+    /**
+     * The login method will compare the hashed password to the stored passwords.
+     */
     private void login() {
+
+        String userName = textFieldUsername.getText();
+        String userPassword = passwordFieldUserPass.getText();
+        String dbSalt = null;
+        String dbPassword;
+        Connection conn = getConnection();
+        String query = "SELECT * FROM login_table WHERE user_name = '" + userName + "'";
+        Statement st;
+        ResultSet rs;
+
+        try {
+            st = conn.createStatement();
+            rs = st.executeQuery(query);
+            /*
+            ----------------------------------------------------------------------------------------------------
+            // TODO rs.getString is a one time procedure. Try to assign it to dbPass and dbSalt in one line.
+            /*
+            --------------------------------------------------------------------------------------------------
+             */
+            while (rs.next())
+            dbPassword = rs.getString("user_password");
+            dbSalt = rs.getString("pass_salt");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        byte[] returnedSalt = hexToByteArray(dbSalt);
+        String returnedPassword = hashedPass(userPassword, returnedSalt);
+
+        if (returnedPassword.equals(returnedPassword)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Login is good.");
+            alert.show();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Incorrect user name of password. Try again!");
+            alert.show();
+        }
+
 
     }
 
+    /**
+     * The newUser method will store the username, uuid, hashed password, and solt in
+     * the database.
+     * @param userName The username chosen.
+     * @param password The password chosen.
+     */
     private void newUser(String userName, String password) {
 
 
         // Retrieve salt from method.
         byte [] salt = salt();
         // Convert to String to store in DB.
-        StringBuilder saltStr = new StringBuilder();
-        for (byte b :
-                salt) {
-            saltStr.append(String.format("%02x", b));
-        }
+        String saltStr = byteArrayToHexString(salt);
         // Create new UUID to use with cat_details table.
         UUID id = UUID.randomUUID();
         String passwordString = hashedPass(password, salt);
@@ -78,7 +130,7 @@ public class LoginController {
             alert.show();
         } else {
             String query = "INSERT INTO login_table VALUES ('" + id + "','" + userName + "','" + passwordString + "','" +
-                    saltStr.toString() + "')";
+                    saltStr + "')";
             executeQuery(query);
             System.out.println(query);
             Alert alert = new Alert(Alert.AlertType.WARNING, "New user created successfully!");
@@ -88,6 +140,13 @@ public class LoginController {
 
     }
 
+    /**
+     * The hashedPass method will be provide the hashed password using PBKDF2WithHmacSHA1
+     * hasing through java.security library.
+     * @param pass The password to be hashed.
+     * @param salt The salt created.
+     * @return
+     */
     private String hashedPass(String pass, byte[] salt) {
         // Check password length.
         if (pass.length() < 8) {
@@ -95,19 +154,18 @@ public class LoginController {
         }
 
         try {
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
-
-            messageDigest.update(salt);
-            byte [] resultBytes = messageDigest.digest();
+            KeySpec keySpec = new PBEKeySpec(pass.toCharArray(), salt, 200000, 512);
+            SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+            byte[] hash = secretKeyFactory.generateSecret(keySpec).getEncoded();
             StringBuilder sb = new StringBuilder();
 
-            for (byte b :
-                    resultBytes) {
-                sb.append(String.format("%02x", b));
-            }
+//            for (byte b :
+//                    hash) {
+//                sb.append(String.format("%02x", b));
+//            }
 
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
+            return byteArrayToHexString(hash);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
             return "";
         }
@@ -131,6 +189,20 @@ public class LoginController {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private String byteArrayToHexString(byte[] bytes) {
+        StringBuilder str = new StringBuilder();
+        for (byte b :
+                bytes) {
+            str.append(String.format("%02x", b));
+        }
+        return str.toString();
+    }
+
+    private byte[] hexToByteArray(String hexStr) {
+        byte[] b = new BigInteger(hexStr,16).toByteArray();
+        return b;
     }
 
 

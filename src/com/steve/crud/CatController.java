@@ -9,7 +9,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.UUID;
 
 
@@ -79,7 +78,7 @@ public class CatController {
     }
 
 
-    public Connection getConnection() {
+    private Connection getConnection() {
         Connection conn;
         try {
             // Not using ssl in non production environment.
@@ -91,7 +90,7 @@ public class CatController {
         }
     }
 
-    public ObservableList<Cat> getCatsList() {
+    private ObservableList<Cat> getCatsList() {
         ObservableList<Cat> catsList = FXCollections.observableArrayList();
         Connection conn = getConnection();
         String query = "SELECT * FROM cats_details";
@@ -114,7 +113,7 @@ public class CatController {
         return catsList;
     }
 
-    public void showCats() {
+    private void showCats() {
         ObservableList<Cat> list = getCatsList();
 
         columnCatsName.setCellValueFactory(new PropertyValueFactory<Cat, String>("name"));
