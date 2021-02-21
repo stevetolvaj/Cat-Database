@@ -144,7 +144,7 @@ public class LoginController {
      * hasing through java.security library.
      * @param pass The password to be hashed.
      * @param salt The salt created.
-     * @return
+     * @return The hashed password as hexadecimal string.
      */
     private String hashedPass(String pass, byte[] salt) {
         // Check password length.
@@ -158,11 +158,6 @@ public class LoginController {
             byte[] hash = secretKeyFactory.generateSecret(keySpec).getEncoded();
             StringBuilder sb = new StringBuilder();
 
-//            for (byte b :
-//                    hash) {
-//                sb.append(String.format("%02x", b));
-//            }
-
             return byteArrayToHexString(hash);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
@@ -172,6 +167,10 @@ public class LoginController {
 
     }
 
+    /**
+     * The salt method will return a random salt for password hashing.
+     * @return The salt as byte array.
+     */
     private byte[] salt() {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
@@ -179,6 +178,10 @@ public class LoginController {
         return salt;
     }
 
+    /**
+     * The executeQuery method will execute the query into the table for manipulating data.
+     * @param query The query to execute.
+     */
     private void executeQuery(String query) {
         Connection conn = getConnection();
         Statement st;
@@ -190,6 +193,11 @@ public class LoginController {
         }
     }
 
+    /**
+     * The byteArrayToHexString will convert a binary byte array to hexadecimal string.
+     * @param bytes The binary byte array.
+     * @return The hexadecimal string.
+     */
     private String byteArrayToHexString(byte[] bytes) {
         StringBuilder str = new StringBuilder();
         for (byte b :
@@ -199,6 +207,12 @@ public class LoginController {
         return str.toString();
     }
 
+
+    /**
+     * The hexToByteArray will convert hex string to binary byte array.
+     * @param hexStr The hex string to convert.
+     * @return The converted binary byte array.
+     */
     private byte[] hexToByteArray(String hexStr) {
         byte[] b = new BigInteger(hexStr,16).toByteArray();
         return b;
