@@ -78,17 +78,28 @@ public class LoginController {
 
         String query = "SELECT * FROM login_table WHERE user_name = '" + userName + "'";
         Statement st;
-        ResultSet rs;
+        ResultSet rs = null;
+
+        /*
+        ***********************************************************************
+         */
+        // TODO Check for null username if different user name is not in table when logging in.
+        /*
+        ***********************************************************************
+         */
 
         try {
-            st = conn.createStatement();
-            rs = st.executeQuery(query);
+            if (conn != null) {
+                st = conn.createStatement();
+                rs = st.executeQuery(query);
+            }
 
-            if (rs.next()) {
+
+            if (rs != null && rs.next()) {
                 dbPassword = rs.getString("user_password");
                 dbSalt = rs.getString("pass_salt");
             }
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -124,7 +135,7 @@ public class LoginController {
         // Create new UUID to use with cat_details table.
         UUID id = UUID.randomUUID();
         String passwordString = hashedPass(password, salt);
-        if (passwordString == "") {
+        if (passwordString.equals("")) {
             Alert alert = new Alert(Alert.AlertType.WARNING, "New user creation failed!\n You may already have an account or your password was less than 8 characters.");
             alert.show();
         } else {
@@ -156,7 +167,6 @@ public class LoginController {
             KeySpec keySpec = new PBEKeySpec(pass.toCharArray(), salt, 200000, 512);
             SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
             byte[] hash = secretKeyFactory.generateSecret(keySpec).getEncoded();
-            StringBuilder sb = new StringBuilder();
 
             return byteArrayToHexString(hash);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -186,8 +196,11 @@ public class LoginController {
         Connection conn = getConnection();
         Statement st;
         try {
-            st = conn.createStatement();
-            st.executeUpdate(query);
+            if (conn != null) {
+                st = conn.createStatement();
+                st.executeUpdate(query);
+            }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -214,8 +227,7 @@ public class LoginController {
      * @return The converted binary byte array.
      */
     private byte[] hexToByteArray(String hexStr) {
-        byte[] b = new BigInteger(hexStr,16).toByteArray();
-        return b;
+        return new BigInteger(hexStr,16).toByteArray();
     }
 
 
