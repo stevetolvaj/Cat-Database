@@ -73,8 +73,9 @@ public class LoginController {
         String userName = textFieldUsername.getText();
         String userPassword = passwordFieldUserPass.getText();
         String dbSalt = null;
-        String dbPassword;
+        String dbPassword = null;
         Connection conn = getConnection();
+
         String query = "SELECT * FROM login_table WHERE user_name = '" + userName + "'";
         Statement st;
         ResultSet rs;
@@ -82,15 +83,12 @@ public class LoginController {
         try {
             st = conn.createStatement();
             rs = st.executeQuery(query);
-            /*
-            ----------------------------------------------------------------------------------------------------
-            // TODO rs.getString is a one time procedure. Try to assign it to dbPass and dbSalt in one line.
-            /*
-            --------------------------------------------------------------------------------------------------
-             */
-            while (rs.next())
-            dbPassword = rs.getString("user_password");
-            dbSalt = rs.getString("pass_salt");
+
+            if (rs.next()) {
+                dbPassword = rs.getString("user_password");
+                dbSalt = rs.getString("pass_salt");
+            }
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -98,13 +96,14 @@ public class LoginController {
         byte[] returnedSalt = hexToByteArray(dbSalt);
         String returnedPassword = hashedPass(userPassword, returnedSalt);
 
-        if (returnedPassword.equals(returnedPassword)) {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Login is good.");
-            alert.show();
+        // Testing Login Password match from database.
+        Alert alert;
+        if (returnedPassword.equals(dbPassword)) {
+            alert = new Alert(Alert.AlertType.WARNING, "Login is good.");
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Incorrect user name of password. Try again!");
-            alert.show();
+            alert = new Alert(Alert.AlertType.WARNING, "Incorrect user name of password. Try again!");
         }
+        alert.show();
 
 
     }
