@@ -57,7 +57,10 @@ public class CatController {
     private Button buttonDelete;
 
 
-
+    /**
+     * The handleButtonAction method will choose the correct action related to the button selected.
+     * @param event The event chosen by button click.
+     */
     @FXML
     public void handleButtonAction(ActionEvent event) {
         if (event.getSource() == buttonInsert) {
@@ -71,13 +74,17 @@ public class CatController {
         }
     }
 
+
     @FXML
     public void initialize() {
         showCats();
         textFieldDOB.getEditor().setDisable(true);
     }
 
-
+    /**
+     * The getConnection method will return a connection to the mySql Database.
+     * @return The connection to the database.
+     */
     private Connection getConnection() {
         Connection conn;
         try {
@@ -90,6 +97,10 @@ public class CatController {
         }
     }
 
+    /**
+     * The getCatsList will retrieve the list of cats from the database and store it in an observable list.
+     * @return The list of cats.
+     */
     private ObservableList<Cat> getCatsList() {
         ObservableList<Cat> catsList = FXCollections.observableArrayList();
         Connection conn = getConnection();
@@ -113,6 +124,9 @@ public class CatController {
         return catsList;
     }
 
+    /**
+     * The showCats method will refresh the list of cats in the table view.
+     */
     private void showCats() {
         ObservableList<Cat> list = getCatsList();
 
@@ -127,11 +141,15 @@ public class CatController {
         tableViewCats.getSortOrder().add(columnCatsName);
     }
 
+    /**
+     * The insertRecord will insert a new cat into the database according to what is in the text fields.
+     */
     private void insertRecord() {
         // Use single quotes for mySQL statements.
         Date getDateFromPicker = java.sql.Date.valueOf(textFieldDOB.getValue());
         // TODO will use uuid provided by login database once login features are created.
-        String query = "INSERT INTO cats_details VALUES ('" + UUID.randomUUID().toString() + "','" + textFieldCatsName.getText() + "','" +
+        String query = "INSERT INTO cats_details VALUES ('" + UUID.randomUUID().toString() + "','" +
+                textFieldCatsName.getText() + "','" +
                 getDateFromPicker + "','" + textFieldBreed.getText() + "','" + textFieldWeight.getText() + "','" +
                 textFieldColor.getText() + "')";
         executeQuery(query);
@@ -139,6 +157,10 @@ public class CatController {
         System.out.println(query);
     }
 
+    /**
+     * The updateRecord method will update the record of a cat in the database according to what name is in the name
+     * text field.
+     */
     private void updateRecord() {
         Date getDateFromPicker = java.sql.Date.valueOf(textFieldDOB.getValue());
         String query = "UPDATE cats_details SET dob = '" + getDateFromPicker +
@@ -148,12 +170,20 @@ public class CatController {
         showCats();
     }
 
+    /**
+     * The delete button will delete the cat selected from the database according to what name is in the name text
+     * field.
+     */
     private void deleteButton() {
         String query = "DELETE FROM cats_details WHERE name = '" + textFieldCatsName.getText() + "'";
         executeQuery(query);
         showCats();
     }
 
+    /**
+     * The executeQuery method will execute the query string provided and apply it to the database.
+     * @param query The query string to execute.
+     */
     private void executeQuery(String query) {
         Connection conn = getConnection();
         Statement st;
@@ -165,6 +195,10 @@ public class CatController {
         }
     }
 
+    /**
+     * The handleMouseAction method will update the text fields to show the selected row from the table.
+     * @param mouseEvent The row selected by mouse click.
+     */
     @FXML
     public void handleMouseAction(MouseEvent mouseEvent) {
         Cat cat = tableViewCats.getSelectionModel().getSelectedItem();

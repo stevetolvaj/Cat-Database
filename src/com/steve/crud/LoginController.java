@@ -33,8 +33,10 @@ public class LoginController {
     @FXML
     private Button btnNewUser;
 
+
     @FXML
     public void initialize() {
+
     }
 
     /**
@@ -56,8 +58,8 @@ public class LoginController {
     private Connection getConnection() {
         Connection conn;
         try {
-            // Not using ssl in non production environment.
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/cats?autoReconnect=true&useSSL=false", "root", "root");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/cats?autoReconnect=true&useSSL=false",
+                    "root", "root");
             return conn;
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
