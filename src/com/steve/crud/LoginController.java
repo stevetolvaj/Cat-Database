@@ -1,20 +1,22 @@
 package com.steve.crud;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.math.BigInteger;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
-import java.sql.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.UUID;
 
 
@@ -33,6 +35,7 @@ public class LoginController {
     @FXML
     private Button btnNewUser;
 
+    private UserInfo user;
 
     @FXML
     public void initialize() {
@@ -45,7 +48,7 @@ public class LoginController {
      */
     public void handleButtonAction(MouseEvent mouseEvent) {
         if (mouseEvent.getSource() == btnNewUser) {
-            newUser(textFieldUsername.getText(), passwordFieldUserPass.getText());
+            newUser();
         } else if (mouseEvent.getSource() == btnLogin) {
             login();
         }
@@ -58,8 +61,10 @@ public class LoginController {
 
         String userName = textFieldUsername.getText();
         String userPassword = passwordFieldUserPass.getText();
-        String dbSalt = null;
+        String dbSalt;
         String dbPassword = null;
+
+
 
         Connection conn = DbConnection.getConnection();
 
@@ -70,144 +75,98 @@ public class LoginController {
         String returnedPassword = null;
         boolean userNameFound = false;
 
-
         try {
-
-
             if (conn != null) {
                 st = conn.createStatement();
                 rs = st.executeQuery(queryPassword);
-
-
             }
-
 
             if (rs != null && rs.next()) {
                 dbPassword = rs.getString("user_password");
                 dbSalt = rs.getString("pass_salt");
+                // Set up user information for use in cat controller class.
+                user = new UserInfo(UUID.fromString(rs.getString("user_uuid")), rs.getString("user_name"));
+                // Hold user in singleton.
+                UserHolder.getInstance().setUser(user);
                 // Check if username was actually found in DB.
                 // If either field is null there was nothing to return from missing username.
-                if (dbPassword != null && dbPassword != null) {
-                    returnedSalt = hexToByteArray(dbSalt);
-                    returnedPassword = hashedPass(userPassword, returnedSalt);
+                if (dbPassword != null) {
+                    returnedSalt = PasswordHasher.hexToByteArray(dbSalt);
+                    returnedPassword = PasswordHasher.hashedPass(userPassword, returnedSalt);
                     userNameFound = true;
                 }
             }
 
         } catch (SQLException e) {
+            System.out.println("Connection error: ");
             e.printStackTrace();
         }
-
 
         // Testing Login Password match from database.
         Alert alert;
         if (returnedPassword != null && returnedPassword.equals(dbPassword)) {
             alert = new Alert(Alert.AlertType.WARNING, "Login is good.");
+            openCatPage();
         } else if (!userNameFound){
             alert = new Alert(Alert.AlertType.WARNING, "User name is not registered in the system!");
         } else {
             alert = new Alert(Alert.AlertType.WARNING, "Incorrect user name or password. Try again!");
         }
         alert.show();
+    }
 
+    private void openCatPage() {
+        Parent part = null;
+        try {
+            part = FXMLLoader.load(getClass().getResource("cats.fxml"));
+            Stage stage = new Stage();
+            Scene scene = new Scene(part);
+            stage.setScene(scene);
+            stage.getIcons().add(new Image("/Images/cat_icon_138789.png"));
+            stage.setTitle("The Cat Dating Database");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
+
 
     /**
      * The newUser method will store the username, uuid, hashed password, and solt in
      * the database.
-     * @param userName The username chosen.
-     * @param password The password chosen.
      */
-    private void newUser(String userName, String password) {
+    private void newUser( ) {
 
+        String userName = textFieldUsername.getText();
+        String password = passwordFieldUserPass.getText();
+        Alert alert;
+
+        // Check password length if too short.
+        if (password.length() < 8) {
+            alert = new Alert(Alert.AlertType.WARNING, "Please use password of at least 8 characters.");
+            alert.show();
+            return;
+        }
 
         // Retrieve salt from method.
-        byte [] salt = salt();
+        byte [] salt = PasswordHasher.salt();
         // Convert to String to store in DB.
-        String saltStr = byteArrayToHexString(salt);
+        String saltStr = PasswordHasher.byteArrayToHexString(salt);
         // Create new UUID to use with cat_details table.
         UUID id = UUID.randomUUID();
-        String passwordString = hashedPass(password, salt);
+        String passwordString = PasswordHasher.hashedPass(password, salt);
         if (passwordString.equals("")) {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "New user creation failed!\n You may already have an account or your password was less than 8 characters.");
-            alert.show();
+            alert = new Alert(Alert.AlertType.WARNING, "New user creation failed!\n You may already have an account.");
         } else {
             String query = "INSERT INTO login_table VALUES ('" + id + "','" + userName + "','" + passwordString + "','" +
                     saltStr + "')";
 
             DbConnection.executeQuery(query);
             System.out.println(query);
-            Alert alert = new Alert(Alert.AlertType.WARNING, "New user created successfully!");
-            alert.show();
+            alert = new Alert(Alert.AlertType.WARNING, "New user created successfully!");
         }
-
-
+        alert.show();
     }
-
-    /**
-     * The hashedPass method will be provide the hashed password using PBKDF2WithHmacSHA1
-     * hasing through java.security library.
-     * @param pass The password to be hashed.
-     * @param salt The salt created.
-     * @return The hashed password as hexadecimal string.
-     */
-    private String hashedPass(String pass, byte[] salt) {
-        // Check password length.
-        if (pass.length() < 8) {
-            return "";
-        }
-
-        try {
-            KeySpec keySpec = new PBEKeySpec(pass.toCharArray(), salt, 200000, 512);
-            SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
-            byte[] hash = secretKeyFactory.generateSecret(keySpec).getEncoded();
-
-            return byteArrayToHexString(hash);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            e.printStackTrace();
-            return "";
-        }
-
-
-    }
-
-    /**
-     * The salt method will return a random salt for password hashing.
-     * @return The salt as byte array.
-     */
-    private byte[] salt() {
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-        return salt;
-    }
-
-
-
-    /**
-     * The byteArrayToHexString will convert a binary byte array to hexadecimal string.
-     * @param bytes The binary byte array.
-     * @return The hexadecimal string.
-     */
-    private String byteArrayToHexString(byte[] bytes) {
-        StringBuilder str = new StringBuilder();
-        for (byte b :
-                bytes) {
-            str.append(String.format("%02x", b));
-        }
-        return str.toString();
-    }
-
-
-    /**
-     * The hexToByteArray will convert hex string to binary byte array.
-     * @param hexStr The hex string to convert.
-     * @return The converted binary byte array.
-     */
-    private byte[] hexToByteArray(String hexStr) {
-        return new BigInteger(hexStr,16).toByteArray();
-    }
-
 
 }

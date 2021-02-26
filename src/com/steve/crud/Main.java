@@ -14,7 +14,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
         primaryStage.setTitle("Cat Dating App");
         primaryStage.setScene(new Scene(root, 800, 500));
-        primaryStage.getIcons().add(new Image("file:src/com/steve/crud/cat_icon_138789.png"));
+        primaryStage.getIcons().add(new Image("/Images/cat_icon_138789.png"));
 
         primaryStage.show();
     }

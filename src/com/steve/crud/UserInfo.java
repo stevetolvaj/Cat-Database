@@ -6,7 +6,7 @@ public class UserInfo {
     private static UUID id;
     private static String userName;
 
-    private UserInfo(UUID id, String userName) {
+    UserInfo(UUID id, String userName) {
         this.id = id;
         this.userName = userName;
     }
@@ -25,11 +25,6 @@ public class UserInfo {
 
     public void setUserName(String userName) {
         UserInfo.userName = userName;
-    }
-
-    public void resetUser() {
-        id = null;
-        userName = null;
     }
 
 }

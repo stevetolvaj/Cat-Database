@@ -56,6 +56,8 @@ public class CatController {
     @FXML
     private Button buttonDelete;
 
+    private UserInfo user;
+
 
     /**
      * The handleButtonAction method will choose the correct action related to the button selected.
@@ -79,6 +81,8 @@ public class CatController {
     public void initialize() {
         showCats();
         textFieldDOB.getEditor().setDisable(true);
+        // Get the UUID and username stored in singleton.
+        user = UserHolder.getInstance().getUser();
     }
 
     /**
