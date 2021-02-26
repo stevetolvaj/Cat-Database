@@ -52,22 +52,6 @@ public class LoginController {
     }
 
     /**
-     * The getConnection method will retrieve a connection to the mySQL database.
-     * @return Connection to mySQL database.
-     */
-    private Connection getConnection() {
-        Connection conn;
-        try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/cats?autoReconnect=true&useSSL=false",
-                    "root", "root");
-            return conn;
-        } catch (Exception ex) {
-            System.out.println("Error: " + ex.getMessage());
-            return null;
-        }
-    }
-
-    /**
      * The login method will compare the hashed password to the stored passwords.
      */
     private void login() {
@@ -76,45 +60,53 @@ public class LoginController {
         String userPassword = passwordFieldUserPass.getText();
         String dbSalt = null;
         String dbPassword = null;
-        Connection conn = getConnection();
 
-        String query = "SELECT * FROM login_table WHERE user_name = '" + userName + "'";
+        Connection conn = DbConnection.getConnection();
+
+        String queryPassword = "SELECT * FROM login_table WHERE user_name = '" + userName + "'";
         Statement st;
         ResultSet rs = null;
+        byte[] returnedSalt;
+        String returnedPassword = null;
+        boolean userNameFound = false;
 
-        /*
-        ***********************************************************************
-         */
-        // TODO Check for null username if different user name is not in table when logging in.
-        /*
-        ***********************************************************************
-         */
 
         try {
+
+
             if (conn != null) {
                 st = conn.createStatement();
-                rs = st.executeQuery(query);
+                rs = st.executeQuery(queryPassword);
+
+
             }
 
 
             if (rs != null && rs.next()) {
                 dbPassword = rs.getString("user_password");
                 dbSalt = rs.getString("pass_salt");
+                // Check if username was actually found in DB.
+                // If either field is null there was nothing to return from missing username.
+                if (dbPassword != null && dbPassword != null) {
+                    returnedSalt = hexToByteArray(dbSalt);
+                    returnedPassword = hashedPass(userPassword, returnedSalt);
+                    userNameFound = true;
+                }
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        byte[] returnedSalt = hexToByteArray(dbSalt);
-        String returnedPassword = hashedPass(userPassword, returnedSalt);
 
         // Testing Login Password match from database.
         Alert alert;
-        if (returnedPassword.equals(dbPassword)) {
+        if (returnedPassword != null && returnedPassword.equals(dbPassword)) {
             alert = new Alert(Alert.AlertType.WARNING, "Login is good.");
+        } else if (!userNameFound){
+            alert = new Alert(Alert.AlertType.WARNING, "User name is not registered in the system!");
         } else {
-            alert = new Alert(Alert.AlertType.WARNING, "Incorrect user name of password. Try again!");
+            alert = new Alert(Alert.AlertType.WARNING, "Incorrect user name or password. Try again!");
         }
         alert.show();
 
@@ -143,7 +135,8 @@ public class LoginController {
         } else {
             String query = "INSERT INTO login_table VALUES ('" + id + "','" + userName + "','" + passwordString + "','" +
                     saltStr + "')";
-            executeQuery(query);
+
+            DbConnection.executeQuery(query);
             System.out.println(query);
             Alert alert = new Alert(Alert.AlertType.WARNING, "New user created successfully!");
             alert.show();
@@ -190,23 +183,7 @@ public class LoginController {
         return salt;
     }
 
-    /**
-     * The executeQuery method will execute the query into the table for manipulating data.
-     * @param query The query to execute.
-     */
-    private void executeQuery(String query) {
-        Connection conn = getConnection();
-        Statement st;
-        try {
-            if (conn != null) {
-                st = conn.createStatement();
-                st.executeUpdate(query);
-            }
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 
     /**
      * The byteArrayToHexString will convert a binary byte array to hexadecimal string.
