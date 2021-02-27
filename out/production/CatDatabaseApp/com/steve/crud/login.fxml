@@ -13,8 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<GridPane alignment="CENTER" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.steve.crud.LoginController">
+<GridPane alignment="CENTER" prefHeight="400.0" prefWidth="600.0" styleClass="login_grid" stylesheets="@login.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.steve.crud.LoginController">
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
@@ -26,12 +25,12 @@
          <children>
             <VBox alignment="CENTER" layoutX="43.0" layoutY="21.0" prefHeight="358.0" prefWidth="515.0">
                <children>
-                  <Label text="The Cat's App">
+                  <Label text="The Cat's App" textFill="WHITE">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Label text="User Login">
+                  <Label text="User Login" textFill="WHITE">
                      <font>
                         <Font size="18.0" />
                      </font>
