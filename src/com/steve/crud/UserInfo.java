@@ -2,6 +2,10 @@ package com.steve.crud;
 
 import java.util.UUID;
 
+/**
+ * The UserInfo class will be used to create user objects to store user UUID and names.
+ */
+
 public class UserInfo {
     private static UUID id;
     private static String userName;

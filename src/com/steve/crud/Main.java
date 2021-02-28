@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
- * The Main method extends java Application library and contains the main method to run launch command required by
+ * The Main class extends java Application library and contains the main method to run launch command required by
  * JavaFX library.
  */
 

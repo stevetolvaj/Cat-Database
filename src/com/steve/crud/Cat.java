@@ -1,7 +1,10 @@
 package com.steve.crud;
 
-
 import java.sql.Date;
+
+/**
+ * The Cat class is used to create cat objects and store the cats information.
+ */
 
 public class Cat {
     private String name;
