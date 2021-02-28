@@ -12,7 +12,7 @@ import java.sql.*;
 import java.util.UUID;
 
 /**
- * The CatController class will be used for control of the main screen with tableview that is linked to the database.
+ * The CatController class will be used for control of the main screen with tableview that is linked to the mySQL database.
  */
 
 
