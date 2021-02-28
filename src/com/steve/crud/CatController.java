@@ -216,7 +216,7 @@ public class CatController {
 
     /**
      * The handleMouseAction method will update the text fields to show the selected row from the table.
-     * @param mouseEvent The row selected by mouse click.
+     * @param mouseEvent The row selected by mouse click event.
      */
     @FXML
     public void handleMouseAction(MouseEvent mouseEvent) {
