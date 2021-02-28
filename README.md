@@ -30,23 +30,22 @@ Source code can be found here https://github.com/SteveT90/Cat-Dating-DB.git and 
 
 <!--## Code Examples
 Show examples of usage:
-`put-your-code-here`
+`put-your-code-here` -->
 
 ## Features
 List of features ready and TODOs for future development
-* Awesome feature 1
-* Awesome feature 2
-* Awesome feature 3
+* User login information stored and passwords are hashed using java.security hashing algorithm "PBKDF2WithHmacSHA512".
+* Cat details are able to be added, updated, and deleted with a click of a button.
 
 To-do list:
-* Wow improvement to be done 1
-* Wow improvement to be done 2
+* Database is currently on local machine and must have mySQL on local machine port 3036, within the week the database will be server based.
+* More cat details will be able to be stored along with user contact information and pictures.
+* Currently anyone can change the details of the cats, soon they will only be able to change thier own details entered by themselves.
 
 ## Status
-Project is: _in progress_, _finished_, _no longer continue_ and why?
+Project is: _in progress_
 
 ## Inspiration
-Add here credits. Project inspired by..., based on...
-
+Project inspired by wanting to learn more about using Java and mySQL together along with JavaFX GUI. Also my first attempt at working with password hashing that has always been an interest to me. As you may be able to tell I also enjoy pets.
 ## Contact
-Created by [@flynerdpl](https://www.flynerd.pl/) - feel free to contact me!-->
+Created by SteveT90 - feel free to contact me!
