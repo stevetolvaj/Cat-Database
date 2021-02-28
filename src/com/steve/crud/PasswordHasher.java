@@ -8,6 +8,11 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 
+/**
+ * The PasswordHasher class will be used as a utility class to hash passwords using "PBKDF2WithHmacSHA512" hashing
+ * algorithm from java.security library. Also contains conversion methods necessary for byte, hex, and string conversions.
+ */
+
 public class PasswordHasher {
 
     private static final String ALGORITHM = "PBKDF2WithHmacSHA512";

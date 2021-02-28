@@ -11,6 +11,10 @@ import javafx.scene.input.MouseEvent;
 import java.sql.*;
 import java.util.UUID;
 
+/**
+ * The CatController class will be used for control of the main screen with tableview that is linked to the database.
+ */
+
 
 public class CatController {
 
@@ -76,7 +80,10 @@ public class CatController {
         }
     }
 
-
+    /**
+     * Initialize method is used to retrieve the data from the database, disable the text portion of the date picker,
+     * and retrieve the user information that was acquired during login from the UserHolder class.
+     */
     @FXML
     public void initialize() {
         showCats();
@@ -113,14 +120,18 @@ public class CatController {
         ResultSet rs;
 
         try {
-            st = conn.createStatement();
-            rs = st.executeQuery(query);
-            Cat cats;
-            while (rs.next()) {
-                cats = new Cat(rs.getString("name"), rs.getDate("dob"),
-                        rs.getString("breed"), rs.getInt("weight"),
-                        rs.getString("color"));
-                catsList.add(cats);
+            if (conn != null) {
+                st = conn.createStatement();
+                rs = st.executeQuery(query);
+
+
+                Cat cats;
+                while (rs.next()) {
+                    cats = new Cat(rs.getString("name"), rs.getDate("dob"),
+                            rs.getString("breed"), rs.getInt("weight"),
+                            rs.getString("color"));
+                    catsList.add(cats);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -134,11 +145,11 @@ public class CatController {
     private void showCats() {
         ObservableList<Cat> list = getCatsList();
 
-        columnCatsName.setCellValueFactory(new PropertyValueFactory<Cat, String>("name"));
-        columnDOB.setCellValueFactory(new PropertyValueFactory<Cat, Date>("dob"));
-        columnBreed.setCellValueFactory(new PropertyValueFactory<Cat, String>("breed"));
-        columnWeight.setCellValueFactory(new PropertyValueFactory<Cat, Integer>("weight"));
-        columnColor.setCellValueFactory(new PropertyValueFactory<Cat, String>("color"));
+        columnCatsName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        columnDOB.setCellValueFactory(new PropertyValueFactory<>("dob"));
+        columnBreed.setCellValueFactory(new PropertyValueFactory<>("breed"));
+        columnWeight.setCellValueFactory(new PropertyValueFactory<>("weight"));
+        columnColor.setCellValueFactory(new PropertyValueFactory<>("color"));
 
         tableViewCats.setItems(list);
         // Sort list in ascending by cats name.
@@ -166,6 +177,7 @@ public class CatController {
      * text field.
      */
     private void updateRecord() {
+        // TODO allow updating of the cats name too.
         Date getDateFromPicker = java.sql.Date.valueOf(textFieldDOB.getValue());
         String query = "UPDATE cats_details SET dob = '" + getDateFromPicker +
                 "', breed = '" + textFieldBreed.getText() + "', weight = '" + textFieldWeight.getText() +
@@ -192,8 +204,11 @@ public class CatController {
         Connection conn = getConnection();
         Statement st;
         try {
-            st = conn.createStatement();
-            st.executeUpdate(query);
+            if (conn != null) {
+                st = conn.createStatement();
+                st.executeUpdate(query);
+            }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
