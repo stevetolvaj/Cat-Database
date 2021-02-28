@@ -24,10 +24,11 @@ I became a cat owner a few years ago and wanted to apply a way for people to mee
 * JavaFX-sdk-15
 * MySQL Connector/J 5.1.49 
 
-<!--## Setup
-Describe how to install / setup your local environement / add link to demo version.
+## Setup
+Install JDK 15 to run / setup your local environement <br /> Jar file found here at https://github.com/SteveT90/Cat-Dating-DB/raw/master/out/artifacts/CatDatabaseApp_jar/CatDatabaseApp.jar  This can be run using java -jar [location of previously downloaded jar file] <br /> <br />
+Source code can be found here https://github.com/SteveT90/Cat-Dating-DB.git and can also run using Intellij or Eclipse
 
-## Code Examples
+<!--## Code Examples
 Show examples of usage:
 `put-your-code-here`
 
