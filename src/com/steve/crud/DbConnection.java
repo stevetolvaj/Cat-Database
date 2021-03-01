@@ -4,6 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
+/**
+ * The DbConnection class will be used as a utility class to allow connection to the database and to execute
+ * queries in the database.
+ */
+
 public class DbConnection {
     private static final String URL = "jdbc:mysql://localhost:3306/cats?autoReconnect=true&useSSL=false";
     private static final String DB_USERNAME = "root";

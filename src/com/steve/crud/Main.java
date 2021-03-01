@@ -7,6 +7,11 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+/**
+ * The Main class extends java Application library and contains the main method to run launch command required by
+ * JavaFX library.
+ */
+
 public class Main extends Application {
 
     @Override

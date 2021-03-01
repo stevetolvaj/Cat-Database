@@ -19,7 +19,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.UUID;
 
-
+/**
+ * The LoginController class is used to control the login screen events.
+ */
 
 public class LoginController {
 
@@ -36,11 +38,6 @@ public class LoginController {
     private Button btnNewUser;
 
     private UserInfo user;
-
-    @FXML
-    public void initialize() {
-
-    }
 
     /**
      * The handleButtonAction method runs the login procedure or create new user procedure.
@@ -64,15 +61,13 @@ public class LoginController {
         String dbSalt;
         String dbPassword = null;
 
-
-
         Connection conn = DbConnection.getConnection();
 
         String queryPassword = "SELECT * FROM login_table WHERE user_name = '" + userName + "'";
         Statement st;
         ResultSet rs = null;
-        byte[] returnedSalt;
-        String returnedPassword = null;
+        byte[] returnedSalt;    // The salt in the DB.
+        String returnedPassword = null; // The password in the DB.
         boolean userNameFound = false;
 
         try {
@@ -101,20 +96,24 @@ public class LoginController {
             System.out.println("Connection error: ");
             e.printStackTrace();
         }
-
+        // TODO Redesign alerts.
         // Testing Login Password match from database.
         Alert alert;
         if (returnedPassword != null && returnedPassword.equals(dbPassword)) {
-            alert = new Alert(Alert.AlertType.WARNING, "Login is good.");
             openCatPage();
         } else if (!userNameFound){
             alert = new Alert(Alert.AlertType.WARNING, "User name is not registered in the system!");
+            alert.show();
         } else {
-            alert = new Alert(Alert.AlertType.WARNING, "Incorrect user name or password. Try again!");
+            alert = new Alert(Alert.AlertType.WARNING, "Incorrect password. Try again!");
+            alert.show();
         }
-        alert.show();
+
     }
 
+    /**
+     * The openCatPage method will open the main database table screen and close the current login screen.
+     */
     private void openCatPage() {
         Parent part = null;
         try {
@@ -125,6 +124,10 @@ public class LoginController {
             stage.getIcons().add(new Image("/Images/cat_icon_138789.png"));
             stage.setTitle("The Cat Dating Database");
             stage.show();
+
+            // Hide the current login screen after main screen opens.
+            textFieldUsername.getScene().getWindow().hide();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -136,7 +139,7 @@ public class LoginController {
      * The newUser method will store the username, uuid, hashed password, and solt in
      * the database.
      */
-    private void newUser( ) {
+    private void newUser() {
 
         String userName = textFieldUsername.getText();
         String password = passwordFieldUserPass.getText();
