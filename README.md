@@ -17,16 +17,19 @@ A JavaFX cat app to help pet owners connect using a form to store a cat's detail
 I became a cat owner a few years ago and wanted to apply a way for people to meet with other similar cats. Just an idea and still a work in progress. Logging into the application allows access to the database to only make changes to your own cats. Uses some password hashing and database storage to fullfill some of my interests. Many more updates and features on the way. 
 
 ## Screenshots
-![login screen screenshot](https://github.com/SteveT90/Cat-Dating-DB/blob/master/src/Images/Login%20Screen.jpg)
-![main database view](https://github.com/SteveT90/Cat-Dating-DB/blob/master/src/Images/Main%20Screeen.jpg)
+![login screen screenshot](https://github.com/SteveT90/Cat-Database/blob/master/src/main/resources/Login%20Screen.jpg?raw=true)
+![main database view](https://github.com/SteveT90/Cat-Database/blob/master/src/main/resources/Main%20Screeen.jpg)
 ## Technologies
 * openjdk-15 - java version "15.0.2"
 * JavaFX-sdk-15
-* MySQL Connector/J 5.1.49 
+* MySQL mysql-connector-java:8.0.15 
+* Gradle
 
 ## Setup
-Install JDK 15 to run / setup your local environement <br /> Jar file found here at https://github.com/SteveT90/Cat-Dating-DB/raw/master/out/artifacts/CatDatabaseApp_jar/CatDatabaseApp.jar  This can be run using java -jar [location of previously downloaded jar file] <br /> <br />
-Source code can be found here https://github.com/SteveT90/Cat-Dating-DB.git and can also run using Intellij or Eclipse
+Gradle runs on all major operating systems and requires only a Java JDK version 8 or higher to be installed. To check, run java -version \
+Download gradle here at: https://gradle.org/releases.\
+After installation is complete navigate into the project folder in terminal or command prompt and use command: gradlew run
+Source code can be found here https://github.com/SteveT90/Cat-Dating-DB.git and can also run using Intellij or Eclipse as Gradle project
 
 <!--## Code Examples
 Show examples of usage:
