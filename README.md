@@ -22,7 +22,7 @@ I became a cat owner a few years ago and wanted to apply a way for people to mee
 ## Technologies
 * openjdk-15 - java version "15.0.2"
 * JavaFX-sdk-15
-* MySQL Connector/J 5.1.49 
+* MySQL mysql-connector-java:8.0.15 
 * Gradle
 
 ## Setup
