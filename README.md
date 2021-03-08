@@ -17,8 +17,8 @@ A JavaFX cat app to help pet owners connect using a form to store a cat's detail
 I became a cat owner a few years ago and wanted to apply a way for people to meet with other similar cats. Just an idea and still a work in progress. Logging into the application allows access to the database to only make changes to your own cats. Uses some password hashing and database storage to fullfill some of my interests. Many more updates and features on the way. 
 
 ## Screenshots
-![login screen screenshot](https://github.com/SteveT90/Cat-Dating-DB/blob/master/src/Images/Login%20Screen.jpg)
-![main database view](https://github.com/SteveT90/Cat-Dating-DB/blob/master/src/Images/Main%20Screeen.jpg)
+![login screen screenshot](https://github.com/SteveT90/Cat-Database/blob/master/src/main/resources/Login%20Screen.jpg?raw=true)
+![main database view](https://github.com/SteveT90/Cat-Database/blob/master/src/main/resources/Main%20Screeen.jpg)
 ## Technologies
 * openjdk-15 - java version "15.0.2"
 * JavaFX-sdk-15
