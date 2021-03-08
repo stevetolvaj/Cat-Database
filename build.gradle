@@ -10,8 +10,7 @@ javafx {
     modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.base', 'javafx.graphics' ]
 }
 
-
-
+mainClassName = 'AppLauncher'
 
 group 'com.github.stevet90'
 version '1.0'
