@@ -1,9 +1,9 @@
 Main.java
  Main
-Cat.java
- Cat
-AppLauncher.java
- AppLauncher
+DbConnection.java
+ DbConnection
+LoginController.java
+ LoginController
 CatController.java
  CatController
 UserInfo.java
@@ -12,7 +12,7 @@ UserHolder.java
  UserHolder
 PasswordHasher.java
  PasswordHasher
-DbConnection.java
- DbConnection
-LoginController.java
- LoginController
+AppLauncher.java
+ AppLauncher
+Cat.java
+ Cat
