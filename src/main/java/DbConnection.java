@@ -8,9 +8,10 @@ import java.sql.Statement;
  */
 
 public class DbConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/cats?autoReconnect=true&useSSL=false";
-    private static final String DB_USERNAME = "root";
-    private static final String DB_PASSWORD = "root";
+    // Use the following for local database: jdbc:mysql://localhost:3306/cats?autoReconnect=true&useSSL=false.
+    private static final String URL = "jdbc:mysql://database-1.cu0qujurujui.us-east-2.rds.amazonaws.com:3306/cats";
+    private static final String DB_USERNAME = "admin";
+    private static final String DB_PASSWORD = "admin1234";
 
     /**
      * The getConnection method will retrieve a connection to the mySQL database.
