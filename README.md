@@ -1,6 +1,6 @@
-# Cat Dating App
+# Cat Database
 
-A JavaFX cat app to help pet owners connect using a form to store a cat's details using login to only allow changes to own cats. Photos and messaging will be added soon. Everything stored in database
+A JavaFX cat app to help pet owners connect using a form to store a cat's details using login to only allow changes to own cats. Everything stored in database. Currently AWS Relational Database System being used is shut down.
 
 
 ## Table of contents
